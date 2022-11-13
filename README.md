@@ -12,6 +12,7 @@ New Config Support macOS 13 (Ventura) 🎉
 |-----------------------|:--------------:|--------------------------------------------------------------------------------------------------------------|
 | macOS Monterey (12.x) |       ✅        | [/Monterey](https://github.com/zmlu/Hackintosh-OC-Colorful-C.B150M-i5-6500-Skylake-HD530/tree/main/Monterey) |
 | macOS Ventura (13.x)  |       ✅        | [/Ventura](https://github.com/zmlu/Hackintosh-OC-Colorful-C.B150M-i5-6500-Skylake-HD530/tree/main/Ventura)   |
+**ps: macOS Ventura 13正式版引导失败，出现禁止图标！！**
 
 Support Status Explanation：
 * ✅ Fully supported, including developer versions
@@ -49,6 +50,23 @@ If you have the same as my motherboard model and system version, you can refer t
 * Hyper-threading (0xE9 Set to 0x1)
 * Execute Disable Bit (0x272 Set to 0x1)
 * EHCI Hand-off (0x2 Set to 0x1)
+
+```shell
+# 用 BOOTx64.efi 进入BIOS shell 直接修改. 但我的主板一致但位置号不一致，估计是BIOS版本不一致。最好在windows里面用BIOS信息读取工具 BIOS_BACKUP_TO_OKIT.EXE 读取位置。
+# 其中最主要的是CFG lock，可以在OC引导界面用 CFGLock.efi 验证并修改
+# 参考链接：https://www.bilibili.com/video/BV1gb4y117FK/?spm_id_from=333.788
+
+setup_var 0x503 0x0
+setup_var 0x5B8 0x0
+setup_var 0x7B0 0x0
+setup_var 0x100E 0x0
+setup_var 0x8BD 0x0
+
+setup_var 0xFE3 0x1
+setup_var 0x4CC 0x1
+setup_var 0x4C5 0x1
+setup_var 0x2 0x1
+```
 
 ## Attention ⚠️
 
