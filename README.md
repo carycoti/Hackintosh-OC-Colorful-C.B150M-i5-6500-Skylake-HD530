@@ -1,86 +1,73 @@
-# Hackintosh-OC-Colorful-C.B150M-i5-6500-Skylake-HD530
+# macOS Monterey (12.x)
 
-Hackintosh OpenCore configuration
+## Support Versions
 
-## What's New
-
-New Config Support macOS 13 (Ventura) 🎉
-
-## Support macOS Versions
-
-| Versions              | Support Status | Path                                                                                                         |
-|-----------------------|:--------------:|--------------------------------------------------------------------------------------------------------------|
-| macOS Monterey (12.x) |       ✅        | [/Monterey](https://github.com/zmlu/Hackintosh-OC-Colorful-C.B150M-i5-6500-Skylake-HD530/tree/main/Monterey) |
-| macOS Ventura (13.x)  |       ✅        | [/Ventura](https://github.com/zmlu/Hackintosh-OC-Colorful-C.B150M-i5-6500-Skylake-HD530/tree/main/Ventura)   |
+| macOS Versions | Build    | Support Status |
+|----------------|----------|:--------------:|
+| 12.0           | 21A344   |       ✅        |
+| 12.0.1         | 21A559   |       ✅        |
+| 12.1           | 21C52    |       ✅        |
+| 12.2           | 21D49    |       ✅        |
+| 12.2.1         | 21D62    |       ✅        |
+| 12.3           | 21E230   |       ✅        |
+| 12.3.1         | 21E258   |       ✅        |
+| 12.4           | 21F79    |       ✅        |
+| 12.5 beta 2	   | 21G5037d |       ✅        |
+| 12.5 beta 3	   | 21G5046c |       ✅        |
 
 Support Status Explanation：
 * ✅ Fully supported, including developer versions
 * ⚠️ Partially supported, consumer version only
 * 🚧 Exploration in progress, not supported
 
-## Computer Hardware
+## SMBIOS
 
-* Motherboard Brand: Colorful Technology And Development Co.,LTD
-* Motherboard Model: Battle Axe C.B150M-HD (V20)
-* Motherboard Chipset: Intel Sunrise Point B150, Intel Skylake-S
+iMac 17,1
 
-* CPU: Intel(R) Core(TM) i5-6500 CPU @ 3.20GHz
-* Graphics Card: Intel HD Graphics 530
-* Nvidia/AMD Graphics Card: None
-* Audio Card：Realtek ALC662
+## OpenCore Version
 
-See detailed configuration at Report.txt(CN)
+| Kext                       | Version              |
+|----------------------------|----------------------|
+| OpenCore                   | 0.8.2                |
+| AppleALC.kext              | 1.7.3                |
+| Lilu.kext                  | 1.6.1                |
+| VirtualSMC.kext            | 1.3.0                |
+| WhateverGreen.kext         | 1.6.0                |
+| CPUFriend.kext             | 1.2.6                |
+| CPUFriendDataProvider.kext | Mac-DB15BD556843C820 |
+| FeatureUnlock.kext         | 1.0.9                |
 
-## BIOS Configuration
+## What does NOT work ⚠️
 
-If you have the same as my motherboard model and system version, you can refer to the position in the brackets and use the BIOS shell to modify.
+* Sleep - Sleeps but won't wake
 
-### Disabled
+## Update Log
 
-* CFG lock (0x11F Set to 0x0)
-* VT-d (0x496 Set to 0x0)
-* SGX (0x1CA Set to 0x0)
-* CSM (0xE17 Set to 0x0)
-* RTC Lock (0x5A5 Set to 0x0)
+* 2022.06.14
+  * Update OpenCore 为 0.8.2 development version
+  * Update Kext
 
-### Enabled
+* 2022.05.13
+  * Update OpenCore 为 0.8.1-59fd524 development version
+  * Update AppleALC.kext、Lilu.kext、VirtualSMC.kext、WhateverGreen.kext、CPUFriend.kext、FeatureUnlock.kext
 
-* Above 4G Decoding (0xDEC Set to 0x1)
-* Hyper-threading (0xE9 Set to 0x1)
-* Execute Disable Bit (0x272 Set to 0x1)
-* EHCI Hand-off (0x2 Set to 0x1)
+* 2022.03.08
+  * Update OpenCore to 0.7.9-c91eebf development version
+  * Update AppleALC.kext、Lilu.kext、VirtualSMC.kext、WhateverGreen.kext、CPUFriend.kext
 
-## Attention ⚠️
+* 2022.01.05
+  * Update OpenCore to 0.7.7-027a2ef development version
+  * Update AppleALC.kext, Lilu.kext, VirtualSMC.kext, WhateverGreen.kext
 
-Please change MLB, SystemSerialNumber, SystemUUID into your own `config.plist`.
+* 2021.11.15
+  * Update OpenCore to 0.7.6-f2bc242 development version
+  * Modified SMBIOS to iMacPro1,1 to unlock Apple Music Lossless format playback
+  * Removed USBPorts.kext because of updated SMBIOS and added USBInjectAll.kext
+  * Because of updated SMBIOS Added AppleMCEReporterDisabler.kext to prevent kernel crash
+  * Added CPUFriend.kext, CPUFriendDataProvider.kext to enable RWD
 
-```xml
-<dict>
-    ...
-    <key>MLB</key>
-    <string>xxxxxxxxxxxxxxx</string>
-    ...
-    <key>SystemSerialNumber</key>
-    <string>xxxxxxxxxxx</string>
-    ...
-    <key>SystemUUID</key>
-    <string>xxxxxxxx-xxxxx-xxxxx-xxxx-xxxxxxxx</string>
-</dict>
-```
+* 2021.11.05
+  * Update OpenCore to 0.7.5 and Kext driver
 
-## How to
-
-### Generate your own `CPUFriendDataProvider.kext`
-
-1. Download the **RELEASE** version of `CPUFriend.kext` from [HERE](https://dortania.github.io/builds/?product=CPUFriend&viewall=true).
-2. Unzip the archive.
-3. Run the shell bellow in `Terminal.app`.
-
-```shell
-./ResourceConverter.sh --kext /System/Library/Extensions/IOPlatformPluginFamily.kext/Contents/PlugIns/X86PlatformPlugin.kext/Contents/Resources/Mac-DB15BD556843C820.plist
-```
-
-> Note: `Mac-DB15BD556843C820` is your `BID` value in config.plist, Please change it according to SMBIOS
-
-
-
+* 2021.08.06
+  * New configuration
