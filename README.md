@@ -1,86 +1,60 @@
-# Hackintosh-OC-Colorful-C.B150M-i5-6500-Skylake-HD530
+# macOS Ventura (13.x)
 
-Hackintosh OpenCore configuration
+Unfortunately, with the announcement of macOS Ventura, Apple has officially dropped support up to Skylake, including IGPU support.
 
-## What's New
+The solution is to modify the config.plist and spoof the GPU properties SKL as KBL.
 
-New Config Support macOS 13 (Ventura) 🎉
+There is a more detailed description in my blog post (Chinese): [Skylake 如何吃上最新黑苹果 macOS  Ventura](https://jacoblu.me/2022/06/17/skylake-hackintosh/)
 
-## Support macOS Versions
+## Support Versions
 
-| Versions              | Support Status | Path                                                                                                         |
-|-----------------------|:--------------:|--------------------------------------------------------------------------------------------------------------|
-| macOS Monterey (12.x) |       ✅        | [/Monterey](https://github.com/zmlu/Hackintosh-OC-Colorful-C.B150M-i5-6500-Skylake-HD530/tree/main/Monterey) |
-| macOS Ventura (13.x)  |       ✅        | [/Ventura](https://github.com/zmlu/Hackintosh-OC-Colorful-C.B150M-i5-6500-Skylake-HD530/tree/main/Ventura)   |
+| macOS Versions | Build    | Support Status |
+|----------------|----------|:--------------:|
+| 13.0 beta 4    | 22A5311f |       ✅        |
 
 Support Status Explanation：
 * ✅ Fully supported, including developer versions
 * ⚠️ Partially supported, consumer version only
 * 🚧 Exploration in progress, not supported
 
-## Computer Hardware
+## Notes of New Boot Args 
 
-* Motherboard Brand: Colorful Technology And Development Co.,LTD
-* Motherboard Model: Battle Axe C.B150M-HD (V20)
-* Motherboard Chipset: Intel Sunrise Point B150, Intel Skylake-S
+| Boot Args           | Notes                                                                      |
+|---------------------|----------------------------------------------------------------------------|
+| lilucpu=9           | Spoofs CPU Generation as KBL.                                              |
+| -igfxsklaskbl	      | Spoofs GPU Generation as KBL.                                              |
+| -disablegfxfirmware | To avoid firmware load endless loop                                        |
+| -wegnoegpu          | To disable all external GPUs (NVIDIA and AMD). Mainly required on Laptops. |
 
-* CPU: Intel(R) Core(TM) i5-6500 CPU @ 3.20GHz
-* Graphics Card: Intel HD Graphics 530
-* Nvidia/AMD Graphics Card: None
-* Audio Card：Realtek ALC662
+## Images
 
-See detailed configuration at Report.txt(CN)
+![info](https://raw.githubusercontent.com/zmlu/Hackintosh-OC-Colorful-C.B150M-i5-6500-Skylake-HD530/main/Ventura/images/ventura_info.png "info")
 
-## BIOS Configuration
+![Stage Manager](https://raw.githubusercontent.com/zmlu/Hackintosh-OC-Colorful-C.B150M-i5-6500-Skylake-HD530/main/Ventura/images/ventura_stage_manager.png "Stage Manager")
 
-If you have the same as my motherboard model and system version, you can refer to the position in the brackets and use the BIOS shell to modify.
+## SMBIOS
 
-### Disabled
+iMac 18,1
 
-* CFG lock (0x11F Set to 0x0)
-* VT-d (0x496 Set to 0x0)
-* SGX (0x1CA Set to 0x0)
-* CSM (0xE17 Set to 0x0)
-* RTC Lock (0x5A5 Set to 0x0)
+## OpenCore Version
 
-### Enabled
+| Kext                       | Version              |
+|----------------------------|----------------------|
+| OpenCore                   | 0.8.2-714fc69        |
+| AppleALC.kext              | 1.7.3                |
+| Lilu.kext                  | 1.6.1-9775e8b        |
+| VirtualSMC.kext            | 1.3.0                |
+| WhateverGreen.kext         | 1.6.0-ade6c98        |
+| CPUFriend.kext             | 1.2.6                |
+| CPUFriendDataProvider.kext | Mac-4B682C642B45593E |
+| FeatureUnlock.kext         | 1.0.9                |
 
-* Above 4G Decoding (0xDEC Set to 0x1)
-* Hyper-threading (0xE9 Set to 0x1)
-* Execute Disable Bit (0x272 Set to 0x1)
-* EHCI Hand-off (0x2 Set to 0x1)
+## Update Log
 
-## Attention ⚠️
+* 2022.06.20
+  * Fix bug: installation failed via OTA.
+  * Update OC: support `AvoidRuntimeDefrag` on Ventura.
+  * WhateverGreen support `-igfxsklaskbl` boot args, so drop `SKLAsKBLGraphicsInfo.kext`.
 
-Please change MLB, SystemSerialNumber, SystemUUID into your own `config.plist`.
-
-```xml
-<dict>
-    ...
-    <key>MLB</key>
-    <string>xxxxxxxxxxxxxxx</string>
-    ...
-    <key>SystemSerialNumber</key>
-    <string>xxxxxxxxxxx</string>
-    ...
-    <key>SystemUUID</key>
-    <string>xxxxxxxx-xxxxx-xxxxx-xxxx-xxxxxxxx</string>
-</dict>
-```
-
-## How to
-
-### Generate your own `CPUFriendDataProvider.kext`
-
-1. Download the **RELEASE** version of `CPUFriend.kext` from [HERE](https://dortania.github.io/builds/?product=CPUFriend&viewall=true).
-2. Unzip the archive.
-3. Run the shell bellow in `Terminal.app`.
-
-```shell
-./ResourceConverter.sh --kext /System/Library/Extensions/IOPlatformPluginFamily.kext/Contents/PlugIns/X86PlatformPlugin.kext/Contents/Resources/Mac-DB15BD556843C820.plist
-```
-
-> Note: `Mac-DB15BD556843C820` is your `BID` value in config.plist, Please change it according to SMBIOS
-
-
-
+* 2022.06.16
+    * New Config Support macOS 13 (Ventura) 🎉
